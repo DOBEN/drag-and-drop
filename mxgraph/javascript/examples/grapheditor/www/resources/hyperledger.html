@@ -1,12 +1,63 @@
 <!DOCTYPE html>
 <html>
+
+
 <head>
     <title>Graph Editor Help</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="../styles/help.css">
 </head>
 <body>
-	<h1>This should be Hyperledfer Fabric code execute.</h1>
-	<p>This should be Hyperledfer Fabric code execute.</p>
+	<h1>Your sequence diagram was sent to Hyperledger Fabric sucessfully.</h1>
+	<p>Your sequence diagram was sent to Hyperledger Fabric successfully.</p>
 </body>
+
+
+<script>
+test()
+
+
+
+function test() {
+    console.log('testestsetsetsetst')
+}
+
+
+    function invoke_hyperledger() {
+
+$("#wichtig").empty();
+
+$.ajax({
+    type: "GET",
+    url: "/invoke_hyperledger",
+    contentType: "application/json",
+    dataType: "json",
+    data: {
+        key: $("#key1").val(),
+        time: new Date(),
+        value: $("#value").val(),
+    },
+    success: function (html_response) {
+        $("#wichtig").append(`<p><center>Added following data to product key <b> ${html_response.key}:</b></center></p>`);
+        $("#wichtig").append(`<p>Timestamp: ${html_response.time},         Action:<b> ${html_response.value}</b></p>`);
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+
+        //	$("#myModal").show()
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    },
+    error: function (html_response) {
+        console.log('Error:');
+        console.log(html_response);
+    }
+});
+}
+</script>
 </html>
+
+
