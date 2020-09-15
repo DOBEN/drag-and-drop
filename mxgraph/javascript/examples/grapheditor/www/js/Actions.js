@@ -862,6 +862,19 @@ Actions.prototype.init = function()
 		
 		graph.openLink(RESOURCES_PATH + '/help' + ext + '.html');
 	});
+
+		// Hyperledger actions
+		this.addAction('hyperledger', function()
+		{
+			var ext = '';
+			
+			if (mxResources.isLanguageSupported(mxClient.language))
+			{
+				ext = '_' + mxClient.language;
+			}
+			
+			graph.openLink(RESOURCES_PATH + '/hyperledger' + ext + '.html');
+		});
 	
 	var showingAbout = false;
 	

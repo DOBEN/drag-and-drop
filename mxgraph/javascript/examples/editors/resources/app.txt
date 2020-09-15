@@ -1,4 +1,5 @@
 urlHelp=help/index.html
+hyperledger=Hyperledger
 lastSaved=Last Saved
 currentFile=Current File
 toolbar=Tools

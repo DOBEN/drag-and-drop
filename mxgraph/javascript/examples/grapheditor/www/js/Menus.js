@@ -30,7 +30,7 @@ Menus.prototype.defaultFontSize = '12';
 /**
  * Sets the default font size.
  */
-Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras', 'help'];
+Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras','help','submitToHyperledger'];
 
 /**
  * Adds the label menu items to the given menu and parent.
@@ -490,14 +490,23 @@ Menus.prototype.init = function()
 		                         'editData', 'editTooltip', 'editStyle', '-', 'edit', '-', 'editLink', 'openLink', '-',
 		                         'selectVertices', 'selectEdges', 'selectAll', 'selectNone', '-', 'lockUnlock']);
 	})));
+
 	this.put('extras', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
 		this.addMenuItems(menu, ['copyConnect', 'collapseExpand', '-', 'editDiagram']);
 	})));
+
 	this.put('help', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
 		this.addMenuItems(menu, ['help', '-', 'about']);
 	})));
+
+	this.put('submitToHyperledger', new Menu(mxUtils.bind(this, function(menu, parent)
+	{
+		this.addMenuItems(menu, ['hyperledger']);
+	})));
+
+	
 };
 
 /**
