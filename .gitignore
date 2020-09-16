@@ -1,0 +1,4 @@
+/mxgraph/node_modules/*
+/mxgraph/javascript/examples/grapheditor/www/node_modules/*
+/mxgraph/javascript/examples/grapheditor/www/fabric-network/chaincode/go/*
+mxgraph/javascript/examples/grapheditor/www/fabric-network/chaincode/go/vendor/*

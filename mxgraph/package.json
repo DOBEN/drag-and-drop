@@ -26,5 +26,10 @@
     "grunt-webpack": "^2.0.1",
     "load-grunt-tasks": "^3.5.2",
     "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "fabric-ca-client": "^2.2.2",
+    "fabric-network": "^2.2.2",
+    "grpc": "^1.24.3"
   }
 }

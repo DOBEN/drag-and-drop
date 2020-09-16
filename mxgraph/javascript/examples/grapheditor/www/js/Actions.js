@@ -10,6 +10,8 @@ function Actions(editorUi) {
 	this.init();
 };
 
+
+
 /**
  * Adds the default actions.
  */
@@ -724,39 +726,65 @@ Actions.prototype.init = function () {
 		//console.log(graph.getSelectionCount())
 		console.log(graph.getModel())
 
-		var num_of_organisation = 0;
-		var num_of_arrows = 0;
-		var Organisations = [];
-		var Arrows = [];
+		//var num_of_organisation = 0;
+		//var num_of_arrows = 0;
+		//var Organisations = [];
+		//var Arrows = [];
+		var total;
+		//var arrow_string="";
+		//var organisation_string="";
 
-		var i = 2;
-
+		//var i = 2;
 		
-		while (graph.getModel().cells[i]) {
-			console.log(graph.getModel().cells[i].value)
-			if (graph.getModel().cells[i].style.includes("umlLifeline")) {
-				Organisations.push(graph.getModel().cells[i].value)
-				num_of_organisation++;
-			}
-			if (graph.getModel().cells[i].style.includes("Arrow")) {
-				
-				console.log('arrow_source')
-				console.log(graph.getModel().cells[i].source.value)
-				console.log('arrow_target')
-				console.log(graph.getModel().cells[i].target.value)
-				num_of_arrows++;
-
-				var item={value:graph.getModel().cells[i].value,source:graph.getModel().cells[i].source.value,target:graph.getModel().cells[i].target.value}
-				Arrows.push(item)
-			}
-			i++;
-		}
+		var [num_of_organisation,num_of_arrows,Organisations,Arrows,arrow_string,organisation_string]=await test();
+	
 		console.log('Organisations')
 		console.log(Organisations)
 		console.log('Arrows')
 		console.log(Arrows)
 		console.log('num_of_organisation: '+num_of_organisation)
 		console.log('num_of_arrows: '+num_of_arrows)
+
+		
+		arrow_string = arrow_string.slice(0, -1)
+		
+
+
+
+var total='~beginNum_of_Organisation:'+num_of_organisation.toString()+','+'Num_of_Arrows:'+num_of_arrows.toString()+','+organisation_string+arrow_string+'~end'
+
+//','+organisation_string+arrow_string
+
+data = JSON.stringify(total);
+
+$.ajax({
+	type: "POST",
+	url: "/invoke_hyperledger",
+	contentType: "application/json",
+	dataType: "json",
+
+	/*data: {
+		num_of_organisation:num_of_organisation,
+		num_of_arrows:num_of_arrows,
+		Organisations:Organisations,
+		Arrows:Arrows,
+	},*/
+
+data:data,
+
+
+
+
+
+	success: function (html_response) {
+console.log('sucesss invoking invoking invoking')
+	},
+	error: function (html_response) {
+		console.log('Error:');
+		console.log(html_response);
+	}
+});
+
 
 
 		if (mxResources.isLanguageSupported(mxClient.language)) {
@@ -765,6 +793,48 @@ Actions.prototype.init = function () {
 
 		graph.openLink(RESOURCES_PATH + '/hyperledger' + ext + '.html');
 	});
+
+	function test (){
+
+
+		var num_of_organisation = 0;
+			var num_of_arrows = 0;
+			var Organisations = [];
+			var Arrows = [];
+	
+			var arrow_string="";
+			var organisation_string="";
+	
+			var i = 2;
+	
+	
+	
+		while (graph.getModel().cells[i]) {
+			console.log(graph.getModel().cells[i].value)
+			if (graph.getModel().cells[i].style.includes("umlLifeline")) {
+				Organisations.push(graph.getModel().cells[i].value)
+				num_of_organisation++;
+				organisation_string=organisation_string+"Organisation"+num_of_organisation+":"+graph.getModel().cells[i].value+','
+			}
+			if (graph.getModel().cells[i].style.includes("Arrow")) {
+				
+				console.log('arrow_source')
+				console.log(graph.getModel().cells[i].source.value)
+				console.log('arrow_target')
+				console.log(graph.getModel().cells[i].target.value)
+				num_of_arrows++;
+				arrow_string=arrow_string+"Arrow"+num_of_arrows+":{value="+graph.getModel().cells[i].value+';StartOfArrow='+graph.getModel().cells[i].source.value+';EndOfArrow='+graph.getModel().cells[i].target.value+'},'
+	
+				var item={value:graph.getModel().cells[i].value,source:graph.getModel().cells[i].source.value,target:graph.getModel().cells[i].target.value}
+				Arrows.push(item)
+			}
+	
+			//console.log(graph.getModel().cells[i])
+			i++;
+		}
+	
+		return [num_of_organisation,num_of_arrows,Organisations,Arrows,arrow_string,organisation_string]
+	}
 
 
 
@@ -1278,6 +1348,5 @@ Action.prototype.setSelectedCallback = function (funct) {
 Action.prototype.isSelected = function () {
 	return this.selectedCallback();
 };
-
 
 

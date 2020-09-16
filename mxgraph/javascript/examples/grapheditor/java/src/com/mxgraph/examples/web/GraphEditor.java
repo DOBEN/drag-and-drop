@@ -37,11 +37,29 @@ public class GraphEditor
 	{
 		Server server = new Server(PORT);
 
+
+
 		// Servlets
 		Context context = new Context(server, "/");
 		context.addServlet(new ServletHolder(new EchoServlet()), "/save");
 		context.addServlet(new ServletHolder(new ExportServlet()), "/export");
 		context.addServlet(new ServletHolder(new OpenServlet()), "/open");
+context.addServlet(new ServletHolder(new ServletTest()), "/invoke_hyperledger");
+//context.addServlet(new ServletHolder(new HyperledgerServlet()), "/invoke_hyperledger");
+//context.addServlet(new ServletHolder(new HyperServlet()), "/invoke_hyperledger");
+		//context.addServlet(new ServletHolder(new Invoke_Hyperledger()), "/invoke_hyperledger");
+
+
+
+/*app.get('/invoke_hyperledger', function (req, res) {
+  q = url.parse(req.url, true).query;
+  Invoke_Hyperledger('store', q.key, q.time, q.value).then((response) => {  
+    res.send({ "status": "success","key":response[0],"time":response[1],"value":response[2]})});
+});*/
+
+
+
+	//Context context = new Context(server, "/");
 
 		ResourceHandler fileHandler = new ResourceHandler();
 		fileHandler.setResourceBase(".");
@@ -52,6 +70,7 @@ public class GraphEditor
 
 		System.out.println("Go to http://localhost:" + PORT + "/javascript/examples/grapheditor/www/index.html");
 		
+
 		server.start();
 		server.join();
 	}
