@@ -30,7 +30,7 @@ Menus.prototype.defaultFontSize = '12';
 /**
  * Sets the default font size.
  */
-Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras','help','submitToHyperledger'];
+Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras','help','submitToBlockchain'];
 
 /**
  * Adds the label menu items to the given menu and parent.
@@ -501,9 +501,9 @@ Menus.prototype.init = function()
 		this.addMenuItems(menu, ['help', '-', 'about']);
 	})));
 
-	this.put('submitToHyperledger', new Menu(mxUtils.bind(this, function(menu, parent)
+	this.put('submitToBlockchain', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
-		this.addMenuItems(menu, ['hyperledger']);
+		this.addMenuItems(menu, ['hyperledger','saveAsJSON']);
 	})));
 
 	

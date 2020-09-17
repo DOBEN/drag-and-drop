@@ -717,123 +717,124 @@ Actions.prototype.init = function () {
 		graph.openLink(RESOURCES_PATH + '/help' + ext + '.html');
 	});
 
+
+	// Save As JSON action
+	this.addAction('saveAsJSON', async function () {
+
+	
+		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = await retrieveGraphInformation();
+		arrow_string = arrow_string.slice(0, -1)
+
+
+		var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
+
+		data = JSON.stringify(total);
+
+		$.ajax({
+			type: "POST",
+			url: "/saveAsJSON",
+			contentType: "application/json",
+			dataType: "json",
+			data: data,
+			success: function (html_response) {
+				console.log('sucesss invoking invoking invoking:')
+				console.log(html_response)
+			},
+			error: function (html_response) {
+				console.log('Error:');
+				console.log(html_response);
+			}
+		});
+
+
+		graph.openLink(RESOURCES_PATH + '/saveAsJSON.html');
+	});
+
 	// Hyperledger actions
 	this.addAction('hyperledger', async function () {
-		var ext = '';
-
-		console.log(graph)
-
-		//console.log(graph.getSelectionCount())
-		console.log(graph.getModel())
-
-		//var num_of_organisation = 0;
-		//var num_of_arrows = 0;
-		//var Organisations = [];
-		//var Arrows = [];
-		var total;
-		//var arrow_string="";
-		//var organisation_string="";
-
-		//var i = 2;
 		
-		var [num_of_organisation,num_of_arrows,Organisations,Arrows,arrow_string,organisation_string]=await test();
-	
+
+
+		var total;
+
+
+		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = await retrieveGraphInformation();
+
 		console.log('Organisations')
 		console.log(Organisations)
 		console.log('Arrows')
 		console.log(Arrows)
-		console.log('num_of_organisation: '+num_of_organisation)
-		console.log('num_of_arrows: '+num_of_arrows)
+		console.log('num_of_organisation: ' + num_of_organisation)
+		console.log('num_of_arrows: ' + num_of_arrows)
 
-		
+
 		arrow_string = arrow_string.slice(0, -1)
-		
 
 
+		var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
 
-var total='~beginNum_of_Organisation:'+num_of_organisation.toString()+','+'Num_of_Arrows:'+num_of_arrows.toString()+','+organisation_string+arrow_string+'~end'
+		data = JSON.stringify(total);
 
-//','+organisation_string+arrow_string
-
-data = JSON.stringify(total);
-
-$.ajax({
-	type: "POST",
-	url: "/invoke_hyperledger",
-	contentType: "application/json",
-	dataType: "json",
-
-	/*data: {
-		num_of_organisation:num_of_organisation,
-		num_of_arrows:num_of_arrows,
-		Organisations:Organisations,
-		Arrows:Arrows,
-	},*/
-
-data:data,
+		$.ajax({
+			type: "POST",
+			url: "/invokeHyperledger",
+			contentType: "application/json",
+			dataType: "json",
+			data: data,
+			success: function (html_response) {
+				console.log('sucesss invoking invoking invoking:')
+				console.log(html_response)
+			},
+			error: function (html_response) {
+				console.log('Error:');
+				console.log(html_response);
+			}
+		});
 
 
-
-
-
-	success: function (html_response) {
-console.log('sucesss invoking invoking invoking')
-	},
-	error: function (html_response) {
-		console.log('Error:');
-		console.log(html_response);
-	}
-});
-
-
-
-		if (mxResources.isLanguageSupported(mxClient.language)) {
-			ext = '_' + mxClient.language;
-		}
-
-		graph.openLink(RESOURCES_PATH + '/hyperledger' + ext + '.html');
+		graph.openLink(RESOURCES_PATH + '/hyperledger.html');
 	});
 
-	function test (){
+	function retrieveGraphInformation() {
 
 
 		var num_of_organisation = 0;
-			var num_of_arrows = 0;
-			var Organisations = [];
-			var Arrows = [];
-	
-			var arrow_string="";
-			var organisation_string="";
-	
-			var i = 2;
-	
-	
-	
+		var num_of_arrows = 0;
+		var Organisations = [];
+		var Arrows = [];
+
+		var arrow_string = "";
+		var organisation_string = "";
+
+		var i = 2;
+
+
+
 		while (graph.getModel().cells[i]) {
 			console.log(graph.getModel().cells[i].value)
 			if (graph.getModel().cells[i].style.includes("umlLifeline")) {
 				Organisations.push(graph.getModel().cells[i].value)
 				num_of_organisation++;
-				organisation_string=organisation_string+"Organisation"+num_of_organisation+":"+graph.getModel().cells[i].value+','
+				organisation_string = organisation_string + "Organisation" + num_of_organisation + ":" + graph.getModel().cells[i].value + ','
 			}
 			if (graph.getModel().cells[i].style.includes("Arrow")) {
-				
+
 				console.log('arrow_source')
 				console.log(graph.getModel().cells[i].source.value)
 				console.log('arrow_target')
 				console.log(graph.getModel().cells[i].target.value)
 				num_of_arrows++;
-				arrow_string=arrow_string+"Arrow"+num_of_arrows+":{value="+graph.getModel().cells[i].value+';StartOfArrow='+graph.getModel().cells[i].source.value+';EndOfArrow='+graph.getModel().cells[i].target.value+'},'
-	
-				var item={value:graph.getModel().cells[i].value,source:graph.getModel().cells[i].source.value,target:graph.getModel().cells[i].target.value}
+				arrow_string = arrow_string + "Arrow" + num_of_arrows + ":{value=" + graph.getModel().cells[i].value + ';StartOfArrow=' + graph.getModel().cells[i].source.value + ';EndOfArrow=' + graph.getModel().cells[i].target.value + '},'
+
+				var item = { value: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
 				Arrows.push(item)
 			}
-	
+
 			//console.log(graph.getModel().cells[i])
 			i++;
 		}
-	
-		return [num_of_organisation,num_of_arrows,Organisations,Arrows,arrow_string,organisation_string]
+
+		return [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string]
 	}
 
 
@@ -1032,10 +1033,10 @@ console.log('sucesss invoking invoking invoking')
 
 			var dlg = new TextareaDialog(this.editorUi, mxResources.get('editStyle') + ':',
 				model.getStyle(cells[0]) || '', function (newValue) {
-				if (newValue != null) {
-					graph.setCellStyle(mxUtils.trim(newValue), cells);
-				}
-			}, null, null, 400, 220);
+					if (newValue != null) {
+						graph.setCellStyle(mxUtils.trim(newValue), cells);
+					}
+				}, null, null, 400, 220);
 			this.editorUi.showDialog(dlg.container, 420, 300, true, true);
 			dlg.init();
 		}

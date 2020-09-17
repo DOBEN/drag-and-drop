@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-public class ServletTest extends HttpServlet
+public class SaveAsJSONServlet extends HttpServlet
 {
 
 	/**
@@ -62,8 +62,10 @@ public class ServletTest extends HttpServlet
 			HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=UTF-8");
+		//response.setCharacterEncoding("UTF-8");
+		//response.setContentType("text/html; charset=UTF-8");
+response.setContentType("application/json; charset=UTF-8");
+
 
 
 
@@ -85,39 +87,21 @@ data = data.replace("~begin","\"");
 data = data.replace("~end","\"");
 data = data.replace(",","\",\"");
 
-data = data.replace("}","}");
-
-data = data.replace("{","{");
 
 System.out.println(data);
-//System.out.println(data.num_of_organisation);
-String[] arrayOfStrings = data.split(",");
-//System.out.println(data);
-//System.out.println(arrayOfStrings[0]);
-//System.out.println(arrayOfStrings[1]);
-//System.out.println(arrayOfStrings[2]);
-//System.out.println(arrayOfStrings[3]);
-///System.out.println(arrayOfStrings[4]);
-//System.out.println(arrayOfStrings[5]);
+
+PrintWriter out = new PrintWriter("Hyperledger_Network_Stats.json");
 
 
-System.getProperty("java.class.path");
+out.println(data);
 
-ProcessBuilder b = new ProcessBuilder("node","/home/doris/Desktop/sequence-diagram/mxgraph/javascript/examples/grapheditor/www/Invoke_Hyperledger.js",data);
-
-//ProcessBuilder pb = new ProcessBuilder("node", "../../../../../www/Invoke_Hyperledger.js");
-
-//System.out.println(arrayOfStrings[0]);
-
-b.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-b.redirectError(ProcessBuilder.Redirect.INHERIT);
-Process p = b.start();
+out.close();
 
 
+response.setStatus(HttpServletResponse.SC_OK);
 
-/////added
 
-		OutputStream out = response.getOutputStream();
+		/*OutputStream out = response.getOutputStream();
 		String encoding = request.getHeader("Accept-Encoding");
 
 		// Supports GZIP content encoding
@@ -162,7 +146,7 @@ Process p = b.start();
 		writer.println("</html>");
 
 		writer.flush();
-		writer.close();
+		writer.close();*/
 	}
 
 	public static void error(PrintWriter w, String key)

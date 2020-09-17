@@ -1,5 +1,6 @@
 urlHelp=help/index.html
 hyperledger=Hyperledger
+saveAsJSON=Save As JSON
 lastSaved=Last Saved
 currentFile=Current File
 toolbar=Tools
