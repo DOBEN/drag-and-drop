@@ -809,8 +809,12 @@ Actions.prototype.init = function () {
 		var i = 2;
 
 
+var cells_array=graph.getModel().cells;
 
-		while (graph.getModel().cells[i]) {
+console.log(graph.getModel())
+
+for ( i in cells_array) {
+	if (i!=0&&i!=1){
 			console.log(graph.getModel().cells[i].value)
 			if (graph.getModel().cells[i].style.includes("umlLifeline")) {
 				Organisations.push(graph.getModel().cells[i].value)
@@ -823,19 +827,32 @@ Actions.prototype.init = function () {
 				console.log(graph.getModel().cells[i].source.value)
 				console.log('arrow_target')
 				console.log(graph.getModel().cells[i].target.value)
+
+				console.log('y-coordinate')
+				console.log(graph.getModel().cells[i].geometry)
+				console.log(graph.getModel().cells[i].geometry.mxGeometry)
+				console.log(graph.getModel().cells[i].geometry.sourcePoint.y)
+				console.log('end y-coordinate')
+
 				num_of_arrows++;
 				arrow_string = arrow_string + "Arrow" + num_of_arrows + ":{value=" + graph.getModel().cells[i].value + ';StartOfArrow=' + graph.getModel().cells[i].source.value + ';EndOfArrow=' + graph.getModel().cells[i].target.value + '},'
 
-				var item = { value: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
+				var item = {yCoordinate:graph.getModel().cells[i].geometry.sourcePoint.y, value: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
 				Arrows.push(item)
 			}
 
-			//console.log(graph.getModel().cells[i])
-			i++;
 		}
+		}
+
+
+		Arrows.sort(function(a, b) {
+			return a.yCoordinate-b.yCoordinate;
+		  })
 
 		return [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string]
 	}
+
+	
 
 
 
