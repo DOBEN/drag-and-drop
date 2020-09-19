@@ -721,8 +721,8 @@ Actions.prototype.init = function () {
 	// Save As JSON action
 	this.addAction('saveAsJSON', async function () {
 
-	
-		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = await retrieveGraphInformation();
+
+		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = retrieveGraphInformation();
 		arrow_string = arrow_string.slice(0, -1)
 
 
@@ -752,13 +752,13 @@ Actions.prototype.init = function () {
 
 	// Hyperledger actions
 	this.addAction('hyperledger', async function () {
-		
+
 
 
 		var total;
 
 
-		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = await retrieveGraphInformation();
+		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = retrieveGraphInformation();
 
 		console.log('Organisations')
 		console.log(Organisations)
@@ -795,6 +795,11 @@ Actions.prototype.init = function () {
 		graph.openLink(RESOURCES_PATH + '/hyperledger.html');
 	});
 
+	function check_special_characters(str) {
+		if (str.includes(",") || str.includes(":") || str.includes("~")) {
+			alert(`\"${str}\" includes a special character (, or : or ~) which is not allowed.`)
+		}
+	}
 	function retrieveGraphInformation() {
 
 
@@ -809,50 +814,67 @@ Actions.prototype.init = function () {
 		var i = 2;
 
 
-var cells_array=graph.getModel().cells;
+		//var cells_array=graph.getModel().cells;
 
-console.log(graph.getModel())
+		console.log(graph.getModel())
 
-for ( i in cells_array) {
-	if (i!=0&&i!=1){
-			console.log(graph.getModel().cells[i].value)
-			if (graph.getModel().cells[i].style.includes("umlLifeline")) {
-				Organisations.push(graph.getModel().cells[i].value)
-				num_of_organisation++;
-				organisation_string = organisation_string + "Organisation" + num_of_organisation + ":" + graph.getModel().cells[i].value + ','
+		for (i in graph.getModel().cells) {
+			if (i != 0 && i != 1) {
+
+
+
+
+				console.log(graph.getModel().cells[i].value)
+				if (graph.getModel().cells[i].style.includes("umlLifeline")) {
+					check_special_characters(graph.getModel().cells[i].value)
+
+					Organisations.push(graph.getModel().cells[i].value)
+					num_of_organisation++;
+					organisation_string = organisation_string + "Organisation" + num_of_organisation + ":" + graph.getModel().cells[i].value + ','
+				}
+				else if (graph.getModel().cells[i].style.includes("Arrow")) {
+
+					check_special_characters(graph.getModel().cells[i].value)
+
+					if (graph.getModel().cells[i].target == null || graph.getModel().cells[i].source === null) {
+						alert(`Arrow \"${graph.getModel().cells[i].value}\" is not correctly connected to a swimlane.`)
+					}
+
+					if (graph.getModel().cells[i].geometry.points === null) {
+						alert(`Y coordinate of Arrow \"${graph.getModel().cells[i].value}\" couldn't be fetched correctly.`)
+
+					}
+
+					console.log('arrow_source')
+					console.log(graph.getModel().cells[i].source.value)
+					console.log('arrow_target')
+					console.log(graph.getModel().cells[i].target.value)
+
+					console.log('y-coordinate')
+					console.log(graph.getModel().cells[i].geometry.points[0].y)
+
+
+					num_of_arrows++;
+					arrow_string = arrow_string + "Arrow" + num_of_arrows + ":{yCoordinate=" + graph.getModel().cells[i].geometry.points[0].y + ";documentID=" + graph.getModel().cells[i].value + ';StartOfArrow=' + graph.getModel().cells[i].source.value + ';EndOfArrow=' + graph.getModel().cells[i].target.value + '},'
+
+					var item = { yCoordinate: graph.getModel().cells[i].geometry.points[0].y, documentID: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
+					Arrows.push(item)
+
+				}
+				else { alert("Unexptected Object on Canvas. Only \"arrows\" and \"umlLifelines\" are supported.") }
+
 			}
-			if (graph.getModel().cells[i].style.includes("Arrow")) {
-
-				console.log('arrow_source')
-				console.log(graph.getModel().cells[i].source.value)
-				console.log('arrow_target')
-				console.log(graph.getModel().cells[i].target.value)
-
-				console.log('y-coordinate')
-				console.log(graph.getModel().cells[i].geometry)
-				console.log(graph.getModel().cells[i].geometry.mxGeometry)
-				console.log(graph.getModel().cells[i].geometry.sourcePoint.y)
-				console.log('end y-coordinate')
-
-				num_of_arrows++;
-				arrow_string = arrow_string + "Arrow" + num_of_arrows + ":{value=" + graph.getModel().cells[i].value + ';StartOfArrow=' + graph.getModel().cells[i].source.value + ';EndOfArrow=' + graph.getModel().cells[i].target.value + '},'
-
-				var item = {yCoordinate:graph.getModel().cells[i].geometry.sourcePoint.y, value: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
-				Arrows.push(item)
-			}
-
-		}
 		}
 
 
-		Arrows.sort(function(a, b) {
-			return a.yCoordinate-b.yCoordinate;
-		  })
+		Arrows.sort(function (a, b) {
+			return a.yCoordinate - b.yCoordinate;
+		})
 
 		return [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string]
 	}
 
-	
+
 
 
 
