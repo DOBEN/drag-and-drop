@@ -734,14 +734,13 @@ Actions.prototype.init = function () {
 			type: "POST",
 			url: "/saveAsJSON",
 			contentType: "application/json",
-			dataType: "json",
 			data: data,
-			success: function (html_response) {
-				console.log('sucesss invoking invoking invoking:')
-				console.log(html_response)
+			success: function () {
+				console.log("Response was successful.")
+
 			},
 			error: function (html_response) {
-				console.log('Error:');
+				console.log('Error occurred:');
 				console.log(html_response);
 			}
 		});
@@ -779,14 +778,13 @@ Actions.prototype.init = function () {
 			type: "POST",
 			url: "/invokeHyperledger",
 			contentType: "application/json",
-			dataType: "json",
 			data: data,
-			success: function (html_response) {
-				console.log('sucesss invoking invoking invoking:')
-				console.log(html_response)
+			success: function () {
+				console.log("Response was successful.")
+
 			},
 			error: function (html_response) {
-				console.log('Error:');
+				console.log('Error occurred:');
 				console.log(html_response);
 			}
 		});
@@ -855,7 +853,6 @@ Actions.prototype.init = function () {
 
 
 					num_of_arrows++;
-					arrow_string = arrow_string + "Arrow" + num_of_arrows + ":{yCoordinate=" + graph.getModel().cells[i].geometry.points[0].y + ";documentID=" + graph.getModel().cells[i].value + ';StartOfArrow=' + graph.getModel().cells[i].source.value + ';EndOfArrow=' + graph.getModel().cells[i].target.value + '},'
 
 					var item = { yCoordinate: graph.getModel().cells[i].geometry.points[0].y, documentID: graph.getModel().cells[i].value, source: graph.getModel().cells[i].source.value, target: graph.getModel().cells[i].target.value }
 					Arrows.push(item)
@@ -871,6 +868,13 @@ Actions.prototype.init = function () {
 			return a.yCoordinate - b.yCoordinate;
 		})
 
+		console.log(Arrows[0].toString())
+
+		for (var i = 1; i <= Arrows.length; i++) {
+			console.log(Arrows[i - 1])
+			arrow_string = arrow_string + 'Arrow' + i + ':{' + 'yCoordinate=' + Arrows[i - 1].yCoordinate + ';documentID=' + Arrows[i - 1].documentID + ';source=' + Arrows[i - 1].source + ';target=' + Arrows[i - 1].target + '},'
+
+		}
 		return [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string]
 	}
 

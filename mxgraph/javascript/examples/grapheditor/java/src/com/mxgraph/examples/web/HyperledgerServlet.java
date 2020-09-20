@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
+
 //import org.json.JSONObject;
 
 
@@ -61,10 +62,14 @@ public class HyperledgerServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		request.setCharacterEncoding("UTF-8");
-		//response.setCharacterEncoding("UTF-8");
-		//response.setContentType("text/html; charset=UTF-8");
-response.setContentType("application/json; charset=UTF-8");
+		
+
+
+
+request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+//response.setContentType("application/json; charset=UTF-8");
 
 
 
@@ -110,13 +115,35 @@ ProcessBuilder b = new ProcessBuilder("node","/home/doris/Desktop/sequence-diagr
 //System.out.println(arrayOfStrings[0]);
 
 b.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-b.redirectError(ProcessBuilder.Redirect.INHERIT);
+//File log = new File( "/tmp/log.txt" );
+
+
+//b.redirectError(ProcessBuilder.Redirect.to(log));
+//b.redirectError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+
+
+ b.redirectErrorStream(true);
+//]b.redirectError(ProcessBuilder.Redirect.response);
 Process p = b.start();
+
+ 
+
+
+
+ //inheritIO(p.getErrorStream(), System.err);
+
+//response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
 
 response.setStatus(HttpServletResponse.SC_OK);
 //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
+
+//PrintWriter out = response.getWriter();
+
+//out.println("status: success");
+ 
+        //out.close();
 
 /////added
 
