@@ -724,9 +724,15 @@ Actions.prototype.init = function () {
 
 		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = retrieveGraphInformation();
 		arrow_string = arrow_string.slice(0, -1)
+		organisation_string = organisation_string.slice(0, -1)
+
+		//var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
+		var total = '{organizations:{' + organisation_string + '},operations:{' + arrow_string + '}}'
+
+		
 
 
-		var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
+
 
 		data = JSON.stringify(total);
 
@@ -746,6 +752,7 @@ Actions.prototype.init = function () {
 		});
 
 
+		
 		graph.openLink(RESOURCES_PATH + '/saveAsJSON.html');
 	});
 
@@ -759,18 +766,32 @@ Actions.prototype.init = function () {
 
 		var [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string] = retrieveGraphInformation();
 
-		console.log('Organisations')
-		console.log(Organisations)
-		console.log('Arrows')
-		console.log(Arrows)
+
+		console.log('hier commt arrow string'+arrow_string)
+		console.log('organisation_string')
+		console.log(organisation_string)
+		console.log('arrow_string')
+		console.log(arrow_string)
 		console.log('num_of_organisation: ' + num_of_organisation)
 		console.log('num_of_arrows: ' + num_of_arrows)
 
 
 		arrow_string = arrow_string.slice(0, -1)
+		organisation_string = organisation_string.slice(0, -1)
+
+		//var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
+
+		var total = '{organizations:{' + organisation_string + '},operations:{' + arrow_string + '}}'
+
+		
+console.log('hier commt total'+total)
+		  
+		
+			
 
 
-		var total = '~beginNum_of_Organisation:' + num_of_organisation.toString() + ',' + 'Num_of_Arrows:' + num_of_arrows.toString() + ',' + organisation_string + arrow_string + '~end'
+
+
 
 		data = JSON.stringify(total);
 
@@ -820,7 +841,11 @@ Actions.prototype.init = function () {
 			if (i != 0 && i != 1) {
 
 
-
+			
+		  
+		  
+			
+			
 
 				console.log(graph.getModel().cells[i].value)
 				if (graph.getModel().cells[i].style.includes("umlLifeline")) {
@@ -828,7 +853,7 @@ Actions.prototype.init = function () {
 
 					Organisations.push(graph.getModel().cells[i].value)
 					num_of_organisation++;
-					organisation_string = organisation_string + "Organisation" + num_of_organisation + ":" + graph.getModel().cells[i].value + ','
+					organisation_string = organisation_string + num_of_organisation + ":" + graph.getModel().cells[i].value + ','
 				}
 				else if (graph.getModel().cells[i].style.includes("Arrow")) {
 
@@ -872,13 +897,16 @@ Actions.prototype.init = function () {
 
 		for (var i = 1; i <= Arrows.length; i++) {
 			console.log(Arrows[i - 1])
-			arrow_string = arrow_string + 'Arrow' + i + ':{' + 'yCoordinate=' + Arrows[i - 1].yCoordinate + ';documentID=' + Arrows[i - 1].documentID + ';source=' + Arrows[i - 1].source + ';target=' + Arrows[i - 1].target + '},'
+			arrow_string = arrow_string  + i + ':{' + 'yCoordinate:' + Arrows[i - 1].yCoordinate + ',documentID:' + Arrows[i - 1].documentID + ',source:' + Arrows[i - 1].source + ',target:' + Arrows[i - 1].target + '},'
 
 		}
+		console.log('arrow_stringneu')
+		console.log(arrow_string)
 		return [num_of_organisation, num_of_arrows, Organisations, Arrows, arrow_string, organisation_string]
 	}
 
 
+			
 
 
 

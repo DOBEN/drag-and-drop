@@ -19,6 +19,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.File;
+
+import java.io.FileOutputStream;
 
 //import org.json.JSONObject;
 
@@ -83,21 +87,20 @@ request.setCharacterEncoding("UTF-8");
         buffer.append(line);
     }
     String data = buffer.toString();
-data="{"+data+"}";
+//data="{"+data+"}";
+//data = data.replace("\"","");
+
+//data = data.replace(":","\":\"");
+//data = data.replace("~begin","\"");
+//data = data.replace("~end","\"");
+//data = data.replace(",","\",\"");
+
 data = data.replace("\"","");
-
-data = data.replace(":","\":\"");
-data = data.replace("~begin","\"");
-data = data.replace("~end","\"");
-data = data.replace(",","\",\"");
-
-
-System.out.println(data);
 
 PrintWriter out = new PrintWriter("Hyperledger_Network_Stats.json");
 
-
-out.println(data);
+//out.print(buffer);
+out.print(data);
 
 out.close();
 
@@ -152,12 +155,13 @@ response.setStatus(HttpServletResponse.SC_OK);
 		writer.flush();
 		writer.close();*/
 	}
+}
 
-	public static void error(PrintWriter w, String key)
+	/*public static void error(PrintWriter w, String key)
 	{
 		w.println("window.parent.openFile.error(window.parent.mxResources.get('"
 				+ key + "'));");
-	}
+	}*/
 
 	/**
 	   * Encodes the passed String as UTF-8 using an algorithm that's compatible
@@ -167,7 +171,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 	   * @param s The String to be encoded
 	   * @return the encoded String
 	   */
-	public static String encodeURIComponent(String s)
+	/*public static String encodeURIComponent(String s)
 	{
 		String result = null;
 
@@ -185,7 +189,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 		}
 
 		return result;
-	}
+	}*/
 
 	///////////////////////////////////////////////////////////////////////
 	// Handling of multipart/form-data **** NOT FOR PRODUCTION USE! **** //
@@ -196,7 +200,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 	/**
 	 * Encoding for the multipart/form-data.
 	 */
-	protected static final String ENCODING = "ISO-8859-1";
+	//protected static final String ENCODING = "ISO-8859-1";
 
 	/**
 	 * Parses the given multipart/form-data request into a map that maps from
@@ -205,7 +209,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 	 * of the file input in the form. Returns an empty map if the form does not
 	 * contain any multipart/form-data.
 	 */
-	protected Map<String, String> parseMultipartRequest(
+	/*protected Map<String, String> parseMultipartRequest(
 			HttpServletRequest request) throws IOException
 	{
 		Map<String, String> result = new Hashtable<String, String>();
@@ -231,7 +235,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 		}
 
 		return result;
-	}
+	}*/
 
 	/**
 	 * Parses the values in the given form-data part into the given map. The
@@ -239,7 +243,7 @@ response.setStatus(HttpServletResponse.SC_OK);
 	 * filename will be stored under filename in the given map and the
 	 * content-type is ignored in this implementation.
 	 */
-	protected void parsePart(String part, Map<String, String> into)
+	/*protected void parsePart(String part, Map<String, String> into)
 	{
 		String[] lines = part.split("\r\n");
 
@@ -272,10 +276,10 @@ response.setStatus(HttpServletResponse.SC_OK);
 						into.put(key, value);
 					}
 				}
-			}
+			}*/
 
 			// Parses all lines starting from the first empty line
-			if (name != null && lines.length > 2)
+			/*if (name != null && lines.length > 2)
 			{
 				boolean active = false;
 				StringBuffer value = new StringBuffer();
@@ -295,12 +299,12 @@ response.setStatus(HttpServletResponse.SC_OK);
 				into.put(name, value.toString());
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Returns the parts of the given multipart/form-data.
 	 */
-	protected List<String> splitFormData(String formData, String boundary)
+	/*protected List<String> splitFormData(String formData, String boundary)
 	{
 		List<String> result = new LinkedList<String>();
 		int nextBoundary = formData.indexOf(boundary);
@@ -317,12 +321,12 @@ response.setStatus(HttpServletResponse.SC_OK);
 		}
 
 		return result;
-	}
+	}*/
 
 	/**
 	 * Reads the complete stream into memory as a String.
 	 */
-	protected String readStream(InputStream is) throws IOException
+	/*protected String readStream(InputStream is) throws IOException
 	{
 		if (is != null)
 		{
@@ -351,4 +355,4 @@ response.setStatus(HttpServletResponse.SC_OK);
 		}
 	}
 
-}
+}*/

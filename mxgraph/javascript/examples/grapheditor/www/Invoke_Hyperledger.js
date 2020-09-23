@@ -4,11 +4,11 @@ Invoke_Hyperledger();
  async function Invoke_Hyperledger() {
      var input=process.argv.slice(2).toString()
      
-     console.log(input)
+
      
     // input.replace(':', '":"');
     
-
+input=input.toString();
   
     // input.replace(']', '');
     // input.replace('[', '');
