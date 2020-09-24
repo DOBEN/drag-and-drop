@@ -3,7 +3,7 @@ package main
 import (
 
 	"fmt"
-
+	"encoding/json"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	sc "github.com/hyperledger/fabric-protos-go/peer"
 )
@@ -26,12 +26,65 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.store(APIstub, args)
 	} else if function == "Init" {
 		return s.Init(APIstub)
+	} else if function == "createNewDocument" {
+		return s.createNewDocument(APIstub, args)
 	}  else {fmt.Println("Invalid Smart Contract function name.")
 	return shim.Error("Invalid Smart Contract function name.")}
 }
 
+
+
 type unit struct {
 	Value string `json:"value"`
+}
+
+
+func (s *SmartContract) createNewDocument(APIstub shim.ChaincodeStubInterface, args []string ) sc.Response {
+		privateDocumentStore :=args[0];
+
+	type documentTransientInput struct {
+		DocumentID  string `json:"documentID"` //the fieldtags are needed to keep case from bouncing around
+		DocumentContent string `json:"documentcontent"`
+	}
+
+
+	transMap, err := APIstub.GetTransient()
+	if err != nil {
+		return shim.Error("Error getting transient: " + err.Error())
+	}
+
+	if _, ok := transMap["document"]; !ok {
+		return shim.Error("document must be a key in the transient map")
+	}
+
+	if len(transMap["document"]) == 0 {
+		return shim.Error("document value in the transient map must be a non-empty JSON string")
+	}
+
+	var documentInput documentTransientInput
+	err = json.Unmarshal(transMap["document"], &documentInput)
+	if err != nil {
+		return shim.Error("Failed to decode JSON of: " + string(transMap["document"]))
+	}
+
+	// ==== Check if document already exists ====
+	documentAsBytes, err := APIstub.GetPrivateData(privateDocumentStore, documentInput.DocumentID)
+	if err != nil {
+		return shim.Error("Failed to get document: " + err.Error())
+	} else if documentAsBytes != nil {
+		fmt.Println("This document already exists: " + documentInput.DocumentID)
+		return shim.Error("This document already exists: " + documentInput.DocumentID)
+	}
+
+	
+	// === Save document to state ===
+	err = APIstub.PutPrivateData(privateDocumentStore, documentInput.DocumentID, []byte(documentInput.DocumentContent))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+
 }
 
 
