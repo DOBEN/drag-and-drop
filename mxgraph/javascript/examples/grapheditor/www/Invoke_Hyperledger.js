@@ -1,18 +1,13 @@
 
 Invoke_Hyperledger();
 
- async function Invoke_Hyperledger() {
-     var input=process.argv.slice(2).toString()
-     
+async function Invoke_Hyperledger() {
+    var input = process.argv.slice(2).toString()
 
-     
-    // input.replace(':', '":"');
-    
-input=input.toString();
-  
-    // input.replace(']', '');
-    // input.replace('[', '');
-console.log(input)
+    input = input.toString();
+
+
+    console.log(input)
     'use strict';
 
     const { Wallets, Gateway } = require('fabric-network');
@@ -32,7 +27,7 @@ console.log(input)
 
         // Parse the connection profile. This would be the path to the file downloaded
         // from the IBM Blockchain Platform operational console.
-        const ccpPath = path.resolve(__dirname, '..', 'www','fabric-network', 'first-network', 'connection-org' + Org + '.json');
+        const ccpPath = path.resolve(__dirname, '..', 'www', 'fabric-network', 'first-network', 'connection-org' + Org + '.json');
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Configure a wallet. This wallet must already be primed with an identity that
@@ -51,11 +46,11 @@ console.log(input)
         // Get the smart contract from the network channel.
         const contract1 = network1.getContract(smartContractID_1);
 
-        await contract1.submitTransaction('store','Hyperledger_Network_Stats',input);
-        
+        await contract1.submitTransaction('store', 'Hyperledger_Network_Stats', input);
+
         await gateway.disconnect();
 
-      //  return [_key, _time,_value]
+        //  return [_key, _time,_value]
 
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);

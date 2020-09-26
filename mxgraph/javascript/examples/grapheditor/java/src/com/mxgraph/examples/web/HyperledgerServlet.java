@@ -84,20 +84,11 @@ request.setCharacterEncoding("UTF-8");
        buffer.append(line);
     }
  String data = buffer.toString();
-//data="{"+data+"}";
+
 data = data.replace("\"","");
-//data = data.replace("\"","");
-//data = data.replace("{","{\"");
-//data = data.replace("}","\"}");
 
-//data = data.replace(":","\":\"");
-//data = data.replace("~begin","\"");
-//data = data.replace("~end","\"");
-//data = data.replace(",","\",\"");
-
-//data="\'"+data+"\'";
-
-data = data.replace("organizations:","\"organizations\":\"");
+data = data.replace("privateDataCollections:","\"privateDataCollections\":\"");
+data = data.replace(",organizations:","\",\"organizations\":\"");
 data = data.replace(",operations:","\",\"operations\":\"");
 data = data.replace("}}}","}}\"}");
 
