@@ -48,147 +48,57 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HyperledgerServlet extends HttpServlet
 {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4442397463551836919L;
-
-
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		
-
-
-
-request.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
-//response.setContentType("application/json; charset=UTF-8");
 
 
+    	StringBuilder buffer = new StringBuilder();
+    	BufferedReader reader = request.getReader();
+    	String line;
+    	while ((line = reader.readLine()) != null) {
+       		buffer.append(line);
+    	}
+ 	String data = buffer.toString();
 
+	// Creating the privateDataCollections
+	int startprivateDataCollections=data.indexOf("privateDataCollections");
+	int endprivateDataCollections=data.substring(startprivateDataCollections).indexOf("}")+startprivateDataCollections;
 
+	String[] splittedprivateDataCollections = data.substring(startprivateDataCollections,endprivateDataCollections).split(",|:");
 
-////added
-    // Read from request
-    StringBuilder buffer = new StringBuilder();
-    BufferedReader reader = request.getReader();
-    String line;
-    while ((line = reader.readLine()) != null) {
-       buffer.append(line);
-    }
- String data = buffer.toString();
+	String DataCollections="";
 
-data = data.replace("\"","");
-
-data = data.replace("privateDataCollections:","\"privateDataCollections\":\"");
-data = data.replace(",organizations:","\",\"organizations\":\"");
-data = data.replace(",operations:","\",\"operations\":\"");
-data = data.replace("}}}","}}\"}");
-
-
-
-System.out.println(data);
-//System.out.println(data.num_of_organisation);
-//String[] arrayOfStrings = data.split(",");
-//System.out.println(data);
-//System.out.println(arrayOfStrings[0]);
-//System.out.println(arrayOfStrings[1]);
-//System.out.println(arrayOfStrings[2]);
-//System.out.println(arrayOfStrings[3]);
-///System.out.println(arrayOfStrings[4]);
-//System.out.println(arrayOfStrings[5]);
-
-
-//System.getProperty("java.class.path");
-
-ProcessBuilder b = new ProcessBuilder("node","/home/doris/Desktop/sequence-diagram/mxgraph/javascript/examples/grapheditor/www/Invoke_Hyperledger.js",data);
-
-//ProcessBuilder pb = new ProcessBuilder("node", "../../../../../www/Invoke_Hyperledger.js");
-
-//System.out.println(arrayOfStrings[0]);
-
-b.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-//File log = new File( "/tmp/log.txt" );
-
-
-//b.redirectError(ProcessBuilder.Redirect.to(log));
-//b.redirectError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-
-
- b.redirectErrorStream(true);
-
-Process p = b.start();
-
-
-
-response.setStatus(HttpServletResponse.SC_OK);
-
-
-
-//PrintWriter out = response.getWriter();
-
-//out.println("status: success");
- 
-        //out.close();
-
-/////added
-
-		/*OutputStream out = response.getOutputStream();
-		String encoding = request.getHeader("Accept-Encoding");
-
-		// Supports GZIP content encoding
-		if (encoding != null && encoding.indexOf("gzip") >= 0)
-		{
-			response.setHeader("Content-Encoding", "gzip");
-			out = new GZIPOutputStream(out);
+	for (int i=0;i<splittedprivateDataCollections.length;i++){
+		if(splittedprivateDataCollections[i].contains("Org")){
+			DataCollections=DataCollections+splittedprivateDataCollections[i]+" "; 
 		}
-
-		PrintWriter writer = new PrintWriter(out);
-		writer.println("<html>");
-		writer.println("<head>");
-		writer.println("</head>");
-		writer.println("<body>");
-		writer.println("<script type=\"text/javascript\">");
-
-		try
-		{
-			if (request.getContentLength() < Constants.MAX_REQUEST_SIZE)
-			{
-				Map<String, String> post = parseMultipartRequest(request);
-				String xml = new String(post.get("upfile").getBytes(ENCODING),
-						"UTF-8");
-				String filename = post.get("filename");
-
-				// Uses JavaScript to load the XML on the client-side
-				writer.println("window.parent.openFile.setData(decodeURIComponent('"
-						+ encodeURIComponent(xml) + "'), '" + filename + "');");
-			}
-			else
-			{
-				error(writer, "drawingTooLarge");
-			}
-		}
-		catch (Exception e)
-		{
-			error(writer, "invalidOrMissingFile");
-		}
-
-		writer.println("</script>");
-		writer.println("</body>");
-		writer.println("</html>");
-
-		writer.flush();
-		writer.close();*/
 	}
 
-	
+	ProcessBuilder b2 = new ProcessBuilder("bash","/home/doris/Desktop/sequence-diagram/mxgraph/javascript/examples/grapheditor/www/fabric-network/first-network/collections_config-generate.sh",DataCollections);
+	b2.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+	b2.redirectErrorStream(true);
+	Process p2 = b2.start();
 
-	
+	// Storing the Hyperledger_Network_Stats into the blockchain
+	data = data.replace("\"","");
+	data = data.replace("privateDataCollections:","\"privateDataCollections\":\"");
+	data = data.replace(",organizations:","\",\"organizations\":\"");
+	data = data.replace(",operations:","\",\"operations\":\"");
+	data = data.replace("}}}","}}\"}");
+
+
+	ProcessBuilder b = new ProcessBuilder("node","/home/doris/Desktop/sequence-diagram/mxgraph/javascript/examples/grapheditor/www/Invoke_Hyperledger.js",data);
+	b.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+	b.redirectErrorStream(true);
+	Process p = b.start();
+
+	response.setStatus(HttpServletResponse.SC_OK);
+	}	
 }
